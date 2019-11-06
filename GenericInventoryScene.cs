@@ -62,8 +62,17 @@ public class GenericInventoryScene : Control
     {
         if (holdingItem != null)
         {
-            Vector2 clickedPosition = GetGlobalMousePosition();
-            //if ()
+        }
+    }
+
+    private void _on_TextureRect_gui_input(InputEvent @event, ItemSlot slot)
+    {
+        if (@event is InputEventMouseButton button && button.ButtonIndex == 1 && button.Pressed)
+        {
+            if (slot == null)
+                GD.Print("Null slot");
+            else if (slot != null && slot.Item != null && slot.Item.Item != null && slot.Item.Item != new Item())
+                GD.Print(slot.Item.Item.Name);
         }
     }
 
@@ -75,7 +84,7 @@ public class GenericInventoryScene : Control
         for (int i = 0; i < 40; i++)
         {
             ItemSlot slot = new ItemSlot(i);
-            slot.Connect("gui_input", slot, "_on_Weapon2_gui_input", new Godot.Collections.Array { slot });
+            slot.Connect("gui_input", this, "_on_TextureRect_gui_input", new Godot.Collections.Array { slot });
             slotList.Add(slot);
             GridInventory.AddChild(slot);
         }
@@ -112,6 +121,7 @@ public class GenericInventoryScene : Control
         LeftRingSlot = new ItemSlot(46);
         LeftRingSlot.ItemTypes = new List<ItemType> { ItemType.Ring };
         RightRingSlot = new ItemSlot(47);
+        RightRingSlot.Name = "RightRing";
         RightRingSlot.ItemTypes = new List<ItemType> { ItemType.Ring };
         if (equipment.Weapon != new Item())
         {
@@ -337,18 +347,6 @@ public class GenericInventoryScene : Control
     }
 
     #endregion Input
-
-    private void _on_Weapon2_gui_input(InputEvent @event, ItemSlot slot)
-    {
-        if (@event is InputEventMouseButton button && button.ButtonIndex == 1 && button.Pressed)
-        {
-            if (slot == null)
-                GD.Print("Null slot");
-            else
-                GD.Print(slot.Item.Item.Name);
-            GD.Print(@event.AsText());
-        }
-    }
 
     //  // Called every frame. 'delt@ga' is the elapsed time since the previous frame.
     //  public override void _Process(float delta)
