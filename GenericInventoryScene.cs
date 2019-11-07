@@ -219,6 +219,10 @@ public class GenericInventoryScene : Control
     /// <returns>First empty <see cref="ItemSlot"/></returns>
     private ItemSlot FindFirstEmptySlot() => slotList.First(slot => slot.Item == null);
 
+    private void Thing(){
+        
+    }
+
     /// <summary>Put an <see cref="InventoryItem"/> into an <see cref="ItemSlot"/>.</summary>
     /// <param name="clickedSlot"><see cref="ItemSlot"/> that was clicked on</param>
     private void PutItem(ItemSlot clickedSlot)
