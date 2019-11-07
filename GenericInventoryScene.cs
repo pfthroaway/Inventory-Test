@@ -275,6 +275,10 @@ public class GenericInventoryScene : Control
         return null;
     }
 
+    private void Thing(){
+        
+    }
+
     /// <summary>Put an <see cref="InventoryItem"/> into an <see cref="ItemSlot"/>.</summary>
     /// <param name="clickedSlot"><see cref="ItemSlot"/> that was clicked on</param>
     private void PutItem(ItemSlot clickedSlot)
