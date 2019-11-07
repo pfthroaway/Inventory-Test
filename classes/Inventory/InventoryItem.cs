@@ -12,7 +12,7 @@ namespace Sulimn.Classes.Inventory
         public Item Item { get; set; } = new Item();
 
         /// <summary><see cref="ItemSlot"/> of this <see cref="InventoryItem"/>.</summary>
-        public ItemSlot Slot { get; set; } = new ItemSlot(0);
+        public ItemSlot Slot { get; set; } = new ItemSlot();
 
         /// <summary>Has this <see cref="InventoryItem"/> been picked up?</summary>
         public bool Picked { get; set; }

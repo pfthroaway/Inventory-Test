@@ -11,9 +11,6 @@ namespace Sulimn.Classes.Inventory
     {
         #region Properties
 
-        /// <summary>Index value of the <see cref="ItemSlot"/>.</summary>
-        public int SlotIndex { get; set; }
-
         /// <summary><see cref="InventoryItem"/> in the <see cref="ItemSlot"/>.</summary>
         public InventoryItem Item { get; set; }
 
@@ -56,11 +53,8 @@ namespace Sulimn.Classes.Inventory
         #endregion Item Manipulation
 
         /// <summary>Initializes an instance of <see cref="ItemSlot"/> by assigning the slot index.</summary>
-        /// <param name="slotIndex">Index value of the slot</param>
-        public ItemSlot(int slotIndex)
+        public ItemSlot()
         {
-            SlotIndex = slotIndex;
-            Name = $"ItemSlot_{slotIndex}";
             Texture = (Texture)ResourceLoader.Load("res://assets/inventory/images/SlotBG.png");
             MouseFilter = MouseFilterEnum.Pass;
             MouseDefaultCursorShape = CursorShape.PointingHand;
