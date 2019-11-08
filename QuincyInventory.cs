@@ -27,8 +27,12 @@ namespace InventoryTest
         {
             for (int i = 0; i < 40; i++)
             {
-                QuincySlot slot = i < inventory.Count ? new QuincySlot(new QuincyItem(inventory[i])) : new QuincySlot();
-                GridInventory.AddChild(slot);
+                QuincySlot slot = new QuincySlot();
+                if (i < inventory.Count)
+                {
+                    slot.Item = new QuincyItem(inventory[i]);
+                    GridInventory.AddChild(slot);
+                }
             }
         }
 

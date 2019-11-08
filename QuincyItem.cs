@@ -60,8 +60,19 @@ namespace InventoryTest
             if (item != null && item != new Item())
             {
                 Item = item;
-                TextureRect rect = (TextureRect)FindNode("TextureRect");
-                rect.Texture = (Texture)ResourceLoader.Load(Item.Texture);
+                SetTooltip(item.TooltipText);
+                //TextureRect rect = (TextureRect)GetNode("TextureRect");
+                GD.Print(item.Name);
+                GD.Print(GetChildCount());
+                if (GetParent() != null)
+                {
+                    GD.Print(GetParent().Name);
+                    GD.Print(GetParent().GetChildCount());
+                }
+                //if (rect != null)
+                //    rect.Texture = (Texture)ResourceLoader.Load(item.Texture);
+                //else
+                //    GD.Print($"Cannot add {item.Texture} to QuincyItem. QuincyItem.TextureRect doesn't exist.");
             }
         }
 
