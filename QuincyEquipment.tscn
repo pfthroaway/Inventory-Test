@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://QuincyEquipment.cs" type="Script" id=1]
+[ext_resource path="res://QuincySlot.tscn" type="PackedScene" id=2]
+
+[node name="Panel2" type="Panel"]
+margin_left = 101.297
+margin_top = 13.6361
+margin_right = 421.297
+margin_bottom = 333.636
+rect_min_size = Vector2( 384, 320 )
+script = ExtResource( 1 )
+
+[node name="HeadSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 161.686
+margin_top = 7.79211
+margin_right = 161.686
+margin_bottom = 7.79211
+
+[node name="BodySlot" parent="." instance=ExtResource( 2 )]
+margin_left = 157.79
+margin_top = 109.089
+margin_right = 157.79
+margin_bottom = 109.089
+
+[node name="RightRingSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 296.099
+margin_top = 105.193
+margin_right = 296.099
+margin_bottom = 105.193
+
+[node name="HandsSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 227.918
+margin_top = 109.089
+margin_right = 227.918
+margin_bottom = 109.089
+
+[node name="LeftRingSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 95.4529
+margin_top = 109.089
+margin_right = 95.4529
+margin_bottom = 109.089
+
+[node name="WeaponSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 27.2723
+margin_top = 109.089
+margin_right = 27.2723
+margin_bottom = 109.089
+
+[node name="LegsSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 157.79
+margin_top = 179.218
+margin_right = 157.79
+margin_bottom = 179.218
+
+[node name="FeetSlot" parent="." instance=ExtResource( 2 )]
+margin_left = 157.79
+margin_top = 247.398
+margin_right = 157.79
+margin_bottom = 247.398

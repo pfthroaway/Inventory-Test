@@ -27,15 +27,6 @@ func _on_TextureRect_gui_input(event: InputEvent) -> void:
 				self.get_parent().remove_child(self)
 				orphanage.add_child(self)
 				self.drag = true
-
-
-
-
-
-
-
-
-
 				print("swapped!")
 			elif orphanage.get_child_count() == 0:
 				drag = true

@@ -151,7 +151,6 @@ public class GenericInventoryScene : Control
             ItemSlot slot = new ItemSlot();
             if (i < inventoryList.Count && inventoryList[i].Item != new Item())
                 slot.SetItem(inventoryList[i]);
-            slot.Connect("gui_input", this, "_on_TextureRect_gui_input", new Godot.Collections.Array { slot });
             GridInventory.AddChild(slot);
         }
     }
@@ -276,7 +275,6 @@ public class GenericInventoryScene : Control
     }
 
     private void Thing(){
-        
     }
 
     /// <summary>Put an <see cref="InventoryItem"/> into an <see cref="ItemSlot"/>.</summary>

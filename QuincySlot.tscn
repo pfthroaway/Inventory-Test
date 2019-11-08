@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://QuincySlot.gd" type="Script" id=1]
+[ext_resource path="res://QuincySlot.cs" type="Script" id=1]
 [ext_resource path="res://assets/inventory/images/SlotBG.png" type="Texture" id=2]
 
 [node name="QuincySlot" type="Control"]

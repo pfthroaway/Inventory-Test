@@ -88,6 +88,10 @@
     <Compile Include="classes\Items\ItemType.cs" />
     <Compile Include="GenericInventoryScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuincyEquipment.cs" />
+    <Compile Include="QuincyInventory.cs" />
+    <Compile Include="QuincyItem.cs" />
+    <Compile Include="QuincySlot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
