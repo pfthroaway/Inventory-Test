@@ -14,7 +14,6 @@ public class GenericInventoryScene : Control
     private InventoryItem Weapon, Head, Body, Hands, Legs, Feet, LeftRing, RightRing;
     private ItemSlot WeaponSlot, HeadSlot, BodySlot, HandsSlot, LegsSlot, FeetSlot, LeftRingSlot, RightRingSlot;
     private GridContainer GridInventory;
-    private List<ItemSlot> slotList = new List<ItemSlot>();
     private List<InventoryItem> inventoryList = new List<InventoryItem>();
     private List<InventoryItem> equipmentList = new List<InventoryItem>();
     private InventoryItem holdingItem;
@@ -26,15 +25,16 @@ public class GenericInventoryScene : Control
         OS.WindowMaximized = true;
         AssignControls();
         SetTooltips();
-        Item helmet = new Item("Helmet", "", ItemType.HeadArmor, 0, 10, 10, 100, 10, 10, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/C_Elm03.png");
-        Item body1 = new Item("Body Armour", "", ItemType.BodyArmor, 0, 10, 10, 100, 10, 10, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Armor05.png");
-        Item body2 = new Item("Plate Armour", "", ItemType.BodyArmor, 0, 20, 10, 200, 10, 10, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Armour02.png");
-        Item shoes = new Item("Shoes", "", ItemType.FeetArmor, 0, 5, 10, 50, 10, 10, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Shoes03.png");
-        CurrentHero.Equipment.Head = helmet;
-        CurrentHero.Equipment.Body = body1;
+        CurrentHero.Equipment.Weapon = new Item("Short Sword", "A short sword.", ItemType.MeleeWeapon, 15, 0, 10, 100, 100, 100, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/W_Sword001.png");
+        CurrentHero.Equipment.Head = new Item("Helmet", "A basic metal helmet.", ItemType.HeadArmor, 0, 10, 10, 100, 40, 40, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/C_Elm03.png");
+        CurrentHero.Equipment.Body = new Item("Body Armour", "A basic metal body covering.", ItemType.BodyArmor, 0, 10, 10, 100, 30, 30, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Armor05.png");
+        CurrentHero.Equipment.LeftRing = new Item("Ring", "A ring with +1 stats!", ItemType.Ring, 0, 5, 0, 500, 10, 10, 1, 1, 1, 1, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/Ac_Ring02.png");
+        CurrentHero.Equipment.RightRing = new Item("Super Ring", "A ring with +2 stats!", ItemType.Ring, 0, 5, 0, 500, 10, 10, 2, 2, 2, 2, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/Ac_Ring05.png");
 
-        CurrentHero.AddItem(shoes);
-        CurrentHero.AddItem(body2);
+        CurrentHero.AddItem(new Item("Plate Armour", "Strong, durable metal armor.", ItemType.BodyArmor, 0, 20, 50, 200, 100, 100, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Armour02.png"));
+        CurrentHero.AddItem(new Item("Shoes", "Regular shoes.", ItemType.FeetArmor, 0, 5, 10, 50, 10, 10, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/A_Shoes03.png"));
+        CurrentHero.AddItem(new Item("Long Sword", "A long sword.", ItemType.MeleeWeapon, 30, 0, 20, 500, 70, 70, 0, 0, 0, 0, 0, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/W_Sword002.png"));
+        CurrentHero.AddItem(new Item("Healing Potion", "A potion that heals you.", ItemType.Potion, 0, 0, 1, 100, 10, 10, 0, 0, 0, 0, 50, 0, false, 1, true, true, new List<HeroClass>(), "res://assets/inventory/images/P_Red03.png"));
         SetUpInventory(CurrentHero.Inventory);
         SetUpEquipment(CurrentHero.Equipment);
     }
@@ -65,14 +65,79 @@ public class GenericInventoryScene : Control
         }
     }
 
-    private void _on_TextureRect_gui_input(InputEvent @event, ItemSlot slot)
+    private void _on_TextureRect_gui_input(InputEvent @event, ItemSlot clickedSlot)
     {
         if (@event is InputEventMouseButton button && button.ButtonIndex == 1 && button.Pressed)
         {
-            if (slot == null)
-                GD.Print("Null slot");
-            else if (slot != null && slot.Item != null && slot.Item.Item != null && slot.Item.Item != new Item())
-                GD.Print(slot.Item.Item.Name);
+            // If currently holding an item
+            if (holdingItem != null)
+            {
+                // If you clicked into a valid slot and the item isn't null
+                if (clickedSlot?.Item != null)
+                {
+                    // Check to see if it is trying to go into an equipment slot.
+                    if (clickedSlot.ItemTypes.Count <= 2)
+                    {
+                        // If the slot already has a valid piece of equipment in it,
+                        // check if the item going into it is a valid piece of equipment.
+                        // If it's not a valid piece of equipment, don't let it go in.
+                        // If the currently held item is a valid piece of equipment,
+                        // let it go into that slot.
+                        if (clickedSlot.ItemTypes.Contains(holdingItem.Item.Type))
+                        {
+                            if (clickedSlot.Name != "RightRing")
+                                EquipAndSwap(clickedSlot);
+                            else
+                                EquipAndSwap(clickedSlot, RingHand.Right);
+                        }
+                    }
+
+                    // If not going into an equipment slot
+                    // check to see if the item came from an equipment slot.
+                    // If it came from an equipment slot, make sure the item
+                    // attempting to be swapped with is a valid piece of equipment for that slot.
+                    // If it's not, unequip it and drop it in the first available slot.
+                    else if (holdingItem.Slot.ItemTypes.Count <= 2)
+                    {
+                        if (holdingItem.Slot.ItemTypes.Contains(clickedSlot.Item.Item.Type))
+                            EquipAndSwap(clickedSlot);
+                        else
+                            UnEquipAndPut(FindFirstEmptySlot());
+                    }
+                    // If the item didn't come from an equipment slot, swap the items.
+                    else
+                        SwapItems(clickedSlot);
+                }
+                // If you clicked into a valid slot and there's nothing there
+                else if (clickedSlot != null)
+                {
+                    if (clickedSlot.ItemTypes.Count <= 2)
+                    {
+                        // If the slot already has a valid piece of equipment in it,
+                        // check if the item going into it is a valid piece of equipment.
+                        // If it's not a valid piece of equipment, don't let it go in.
+                        // If the currently held item is a valid piece of equipment,
+                        // let it go into that slot.
+                        if (clickedSlot.ItemTypes.Contains(holdingItem.Item.Type))
+                        {
+                            if (clickedSlot.Name != "RightRing")
+                                EquipAndPut(clickedSlot);
+                            else
+                                EquipAndPut(clickedSlot, RingHand.Right);
+                        }
+                    }
+                    else if (holdingItem.Slot.ItemTypes.Count <= 2)
+                        UnEquipAndPut(clickedSlot);
+                    else
+                        PutItem(clickedSlot);
+                }
+            }
+            else if (clickedSlot?.Item != null)
+            {
+                holdingItem = clickedSlot.Item;
+                clickedSlot.PickItem();
+                holdingItem.RectGlobalPosition = new Vector2(button.GlobalPosition.x, button.GlobalPosition.y);
+            }
         }
     }
 
@@ -83,44 +148,31 @@ public class GenericInventoryScene : Control
 
         for (int i = 0; i < 40; i++)
         {
-            ItemSlot slot = new ItemSlot(i);
+            ItemSlot slot = new ItemSlot();
+            if (i < inventoryList.Count && inventoryList[i].Item != new Item())
+                slot.SetItem(inventoryList[i]);
             slot.Connect("gui_input", this, "_on_TextureRect_gui_input", new Godot.Collections.Array { slot });
-            slotList.Add(slot);
             GridInventory.AddChild(slot);
-        }
-
-        if (inventoryList.Count <= 40)
-        {
-            for (int i = 0; i < inventoryList.Count; i++)
-            {
-                slotList[i].SetItem(inventoryList[i]);
-                slotList[i].Name = inventoryList[i].Item.Name;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 40; i++)
-                slotList[i].SetItem(inventoryList[i]);
         }
     }
 
     public void SetUpEquipment(Equipment equipment)
     {
-        WeaponSlot = new ItemSlot(40);
+        WeaponSlot = new ItemSlot();
         WeaponSlot.ItemTypes = new List<ItemType> { ItemType.MeleeWeapon, ItemType.RangedWeapon };
-        HeadSlot = new ItemSlot(41);
+        HeadSlot = new ItemSlot();
         HeadSlot.ItemTypes = new List<ItemType> { ItemType.HeadArmor };
-        BodySlot = new ItemSlot(42);
+        BodySlot = new ItemSlot();
         BodySlot.ItemTypes = new List<ItemType> { ItemType.BodyArmor };
-        HandsSlot = new ItemSlot(43);
+        HandsSlot = new ItemSlot();
         HandsSlot.ItemTypes = new List<ItemType> { ItemType.HandArmor };
-        LegsSlot = new ItemSlot(44);
+        LegsSlot = new ItemSlot();
         LegsSlot.ItemTypes = new List<ItemType> { ItemType.LegArmor };
-        FeetSlot = new ItemSlot(45);
+        FeetSlot = new ItemSlot();
         FeetSlot.ItemTypes = new List<ItemType> { ItemType.FeetArmor };
-        LeftRingSlot = new ItemSlot(46);
+        LeftRingSlot = new ItemSlot();
         LeftRingSlot.ItemTypes = new List<ItemType> { ItemType.Ring };
-        RightRingSlot = new ItemSlot(47);
+        RightRingSlot = new ItemSlot();
         RightRingSlot.Name = "RightRing";
         RightRingSlot.ItemTypes = new List<ItemType> { ItemType.Ring };
         if (equipment.Weapon != new Item())
@@ -163,16 +215,9 @@ public class GenericInventoryScene : Control
             RightRing = new InventoryItem(equipment.RightRing, RightRingSlot);
             RightRingSlot.SetItem(RightRing);
         }
-
-        slotList.Add(WeaponSlot);
-        slotList.Add(HeadSlot);
-        slotList.Add(BodySlot);
-        slotList.Add(HandsSlot);
-        slotList.Add(LegsSlot);
-        slotList.Add(FeetSlot);
-        slotList.Add(LeftRingSlot);
-        slotList.Add(RightRingSlot);
-
+        List<ItemSlot> items = new List<ItemSlot> { HeadSlot, BodySlot, WeaponSlot, LegsSlot, HandsSlot, FeetSlot, LeftRingSlot, RightRingSlot };
+        foreach (ItemSlot slot in items)
+            slot.Connect("gui_input", this, "_on_TextureRect_gui_input", new Godot.Collections.Array { slot });
         WeaponRect.AddChild(WeaponSlot);
         HeadRect.AddChild(HeadSlot);
         BodyRect.AddChild(BodySlot);
@@ -217,7 +262,18 @@ public class GenericInventoryScene : Control
 
     /// <summary>Finds the first empty <see cref="ItemSlot"/> in the slotList.</summary>
     /// <returns>First empty <see cref="ItemSlot"/></returns>
-    private ItemSlot FindFirstEmptySlot() => slotList.First(slot => slot.Item == null);
+    private ItemSlot FindFirstEmptySlot()
+    {
+        List<object> children = GridInventory.GetChildren().ToList();
+        foreach (ItemSlot slot in children)
+        {
+            if (slot?.Item == null || slot.Item.Item == null || slot.Item.Item == new Item())
+            {
+                return slot;
+            }
+        }
+        return null;
+    }
 
     private void Thing(){
         
@@ -236,7 +292,7 @@ public class GenericInventoryScene : Control
     private void SwapItems(ItemSlot clickedSlot)
     {
         InventoryItem tempItem = clickedSlot.Item;
-        ItemSlot oldSlot = slotList[holdingItem.Slot.SlotIndex];
+        ItemSlot oldSlot = holdingItem.Slot;
         clickedSlot.PickItem();
         clickedSlot.PutItem(holdingItem);
         holdingItem = null;
@@ -248,11 +304,8 @@ public class GenericInventoryScene : Control
     /// <param name="hand"><see cref="RingHand"/> to place a Ring on if <see cref="Item"/> is a Ring</param>
     private void UnEquipAndPut(ItemSlot clickedSlot, RingHand hand = RingHand.Left)
     {
-        if (clickedSlot.SlotIndex <= 40)
-        {
-            CurrentHero.Unequip(holdingItem.Item, hand);
-            PutItem(clickedSlot);
-        }
+        CurrentHero.Unequip(holdingItem.Item, hand);
+        PutItem(clickedSlot);
     }
 
     #endregion Item Manipulation
@@ -267,87 +320,6 @@ public class GenericInventoryScene : Control
 
     public override void _GuiInput(InputEvent @event)
     {
-        if (@event is InputEventMouseButton button && button.ButtonIndex == 1 && button.Pressed)
-        {
-            ItemSlot clickedSlot = null;
-            // Check if the slot being clicked is in the slotList
-            foreach (ItemSlot slot in slotList)
-            {
-                Vector2 slotMousePos = slot.GetLocalMousePosition();
-                Texture slotTexture = slot.Texture;
-                bool isClicked = slotMousePos.x >= 0 && slotMousePos.x <= slotTexture.GetWidth() && slotMousePos.y >= 0 && slotMousePos.y <= slotTexture.GetHeight();
-                if (isClicked)
-                {
-                    clickedSlot = slot;
-                    break;
-                }
-            }
-
-            // If currently holding an item
-            if (holdingItem != null)
-            {
-                // If you clicked into a valid slot and the item isn't null
-                if (clickedSlot?.Item != null)
-                {
-                    // Check to see if it is trying to go into an equipment slot.
-                    if (clickedSlot.ItemTypes.Count <= 2)
-                    {
-                        // If the slot already has a valid piece of equipment in it,
-                        // check if the item going into it is a valid piece of equipment.
-                        // If it's not a valid piece of equipment, don't let it go in.
-                        // If the currently held item is a valid piece of equipment,
-                        // let it go into that slot.
-                        if (clickedSlot.ItemTypes.Contains(holdingItem.Item.Type))
-                        {
-                            if (clickedSlot.SlotIndex != 47)
-                                EquipAndSwap(clickedSlot);
-                            else
-                                EquipAndSwap(clickedSlot, RingHand.Right);
-                        }
-                    }
-
-                    // If not going into an equipment slot
-                    // check to see if the item came from an equipment slot.
-                    // If it came from an equipment slot, make sure the item
-                    // attempting to be swapped with is a valid piece of equipment for that slot.
-                    // If it's not, unequip it and drop it in the first available slot.
-                    else if (holdingItem.Slot.ItemTypes.Count <= 2)
-                        UnEquipAndPut(FindFirstEmptySlot());
-                    // If the item didn't come from an equipment slot, swap the items.
-                    else
-                        SwapItems(clickedSlot);
-                }
-                // If you clicked into a valid slot and there's nothing there
-                else if (clickedSlot != null)
-                {
-                    if (clickedSlot.ItemTypes.Count <= 2)
-                    {
-                        // If the slot already has a valid piece of equipment in it,
-                        // check if the item going into it is a valid piece of equipment.
-                        // If it's not a valid piece of equipment, don't let it go in.
-                        // If the currently held item is a valid piece of equipment,
-                        // let it go into that slot.
-                        if (clickedSlot.ItemTypes.Contains(holdingItem.Item.Type))
-                        {
-                            if (clickedSlot.SlotIndex != 47)
-                                EquipAndPut(clickedSlot);
-                            else
-                                EquipAndPut(clickedSlot, RingHand.Right);
-                        }
-                    }
-                    else if (holdingItem.Slot.ItemTypes.Count <= 2)
-                        UnEquipAndPut(clickedSlot);
-                    else
-                        PutItem(clickedSlot);
-                }
-            }
-            else if (clickedSlot?.Item != null)
-            {
-                holdingItem = clickedSlot.Item;
-                clickedSlot.PickItem();
-                holdingItem.RectGlobalPosition = new Vector2(button.Position.x, button.Position.y);
-            }
-        }
     }
 
     #endregion Input
