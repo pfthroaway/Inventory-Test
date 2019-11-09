@@ -12,31 +12,43 @@ namespace InventoryTest
     {
         public bool Drag;
         private Control orphanage;
+        private Item _item = new Item();
 
-        public Item Item { get; set; } = new Item();
+        public Item Item
+        {
+            get => _item;
+            set => SetItem(value);
+        }
 
         public override void _Ready()
         {
             orphanage = (Control)GetTree().CurrentScene.FindNode("Orphanage");
+            MouseDefaultCursorShape = CursorShape.PointingHand;
         }
 
         private void _on_TextureRect_gui_input(InputEvent @event)
         {
             if (@event is InputEventMouseButton button && button.Pressed && button.ButtonIndex == 1)
             {
+                GD.Print("Clicked Item");
                 if (!Drag)
                 {
                     if (orphanage.GetChildCount() > 0)
                     {
+                        QuincySlot slot = (QuincySlot)GetParent();
                         QuincyItem orphanItem = (QuincyItem)orphanage.GetChild(0);
-                        orphanItem.MouseFilter = MouseFilterEnum.Pass;
-                        orphanItem.Drag = false;
-                        orphanItem.RectGlobalPosition = Vector2.Zero;
-                        orphanage.RemoveChild(orphanItem);
-                        GetParent().AddChild(orphanItem);
-                        GetParent().RemoveChild(this);
-                        orphanage.AddChild(this);
-                        Drag = true;
+                        if (slot.ItemTypes.Contains(orphanItem.Item.Type))
+                        {
+                            orphanItem.MouseFilter = MouseFilterEnum.Ignore;
+                            orphanItem.Drag = false;
+                            orphanItem.RectGlobalPosition = Vector2.Zero;
+                            orphanage.RemoveChild(orphanItem);
+                            slot.AddChild(orphanItem);
+                            slot.RemoveChild(this);
+                            orphanage.AddChild(this);
+
+                            Drag = true;
+                        }
                     }
                     else if (orphanage.GetChildCount() == 0)
                     {
@@ -59,9 +71,9 @@ namespace InventoryTest
         {
             if (item != null && item != new Item())
             {
-                Item = item;
+                _item = item;
+                TextureRect rect = (TextureRect)GetNode("TextureRect");
                 SetTooltip(item.TooltipText);
-                //TextureRect rect = (TextureRect)GetNode("TextureRect");
                 GD.Print(item.Name);
                 GD.Print(GetChildCount());
                 if (GetParent() != null)
@@ -69,10 +81,7 @@ namespace InventoryTest
                     GD.Print(GetParent().Name);
                     GD.Print(GetParent().GetChildCount());
                 }
-                //if (rect != null)
-                //    rect.Texture = (Texture)ResourceLoader.Load(item.Texture);
-                //else
-                //    GD.Print($"Cannot add {item.Texture} to QuincyItem. QuincyItem.TextureRect doesn't exist.");
+                rect.Texture = (Texture)ResourceLoader.Load(item.Texture);
             }
         }
 
