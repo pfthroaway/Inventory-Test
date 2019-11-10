@@ -17,7 +17,6 @@ margin_left = 161.686
 margin_top = 7.79211
 margin_right = -158.314
 margin_bottom = -248.208
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="BodySlot" parent="." instance=ExtResource( 2 )]
@@ -25,7 +24,6 @@ margin_left = 157.79
 margin_top = 109.089
 margin_right = -162.21
 margin_bottom = -146.911
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="RightRingSlot" parent="." instance=ExtResource( 2 )]
@@ -33,7 +31,6 @@ margin_left = 296.099
 margin_top = 105.193
 margin_right = -23.901
 margin_bottom = -150.807
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="HandsSlot" parent="." instance=ExtResource( 2 )]
@@ -41,7 +38,6 @@ margin_left = 227.918
 margin_top = 109.089
 margin_right = -92.082
 margin_bottom = -146.911
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="LeftRingSlot" parent="." instance=ExtResource( 2 )]
@@ -49,7 +45,6 @@ margin_left = 95.4529
 margin_top = 109.089
 margin_right = -224.547
 margin_bottom = -146.911
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="WeaponSlot" parent="." instance=ExtResource( 2 )]
@@ -57,7 +52,6 @@ margin_left = 27.2723
 margin_top = 109.089
 margin_right = -292.728
 margin_bottom = -146.911
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="LegsSlot" parent="." instance=ExtResource( 2 )]
@@ -65,7 +59,6 @@ margin_left = 157.79
 margin_top = 179.218
 margin_right = -162.21
 margin_bottom = -76.782
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )
 
 [node name="FeetSlot" parent="." instance=ExtResource( 2 )]
@@ -73,5 +66,4 @@ margin_left = 157.79
 margin_top = 247.398
 margin_right = -162.21
 margin_bottom = -8.60199
-rect_min_size = Vector2( 64, 64 )
 theme = ExtResource( 3 )

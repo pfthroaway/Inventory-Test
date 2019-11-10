@@ -16,12 +16,14 @@ namespace InventoryTest
         private QuincyEquipment QuincyEquipment;
         private QuincySlot WeaponSlot, HeadSlot, BodySlot, HandsSlot, LegsSlot, FeetSlot, LeftRingSlot, RightRingSlot;
         private Hero CurrentHero = new Hero();
+        private Control Orphanage;
 
         /// <summary>Assign all controls.</summary>
         private void AssignControls()
         {
             GridInventory = (GridContainer)GetNode("Panel/GridInventory");
             QuincyEquipment = (QuincyEquipment)GetNode("QuincyEquipment");
+            Orphanage = (Control)GetTree().CurrentScene.FindNode("Orphanage");
             WeaponSlot = (QuincySlot)QuincyEquipment.GetNode("WeaponSlot");
             HeadSlot = (QuincySlot)QuincyEquipment.GetNode("HeadSlot");
             BodySlot = (QuincySlot)QuincyEquipment.GetNode("BodySlot");
@@ -107,6 +109,12 @@ namespace InventoryTest
 
         public override void _Process(float delta)
         {
+            if (Orphanage.GetChildCount() > 0)
+            {
+                Orphanage.MouseFilter = MouseFilterEnum.Ignore;
+                QuincyItem item = (QuincyItem)Orphanage.GetChild(0);
+                item.MouseFilter = MouseFilterEnum.Ignore;
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ namespace InventoryTest
         {
             if (@event is InputEventMouseButton button && button.Pressed && button.ButtonIndex == 1)
             {
-                GD.Print("Clicked Item");
                 if (!Drag)
                 {
                     if (orphanage.GetChildCount() > 0)
@@ -39,7 +38,8 @@ namespace InventoryTest
                         QuincyItem orphanItem = (QuincyItem)orphanage.GetChild(0);
                         if (slot.ItemTypes.Contains(orphanItem.Item.Type))
                         {
-                            orphanItem.MouseFilter = MouseFilterEnum.Ignore;
+                            TextureRect rect = (TextureRect)orphanItem.GetChild(0);
+                            rect.MouseFilter = MouseFilterEnum.Pass;
                             orphanItem.Drag = false;
                             orphanItem.RectGlobalPosition = Vector2.Zero;
                             orphanage.RemoveChild(orphanItem);
@@ -47,13 +47,17 @@ namespace InventoryTest
                             slot.RemoveChild(this);
                             orphanage.AddChild(this);
 
+                            TextureRect rect2 = (TextureRect)GetChild(0);
+                            rect2.MouseFilter = MouseFilterEnum.Ignore;
+
                             Drag = true;
                         }
                     }
                     else if (orphanage.GetChildCount() == 0)
                     {
                         Drag = true;
-                        MouseFilter = MouseFilterEnum.Ignore;
+                        TextureRect rect = (TextureRect)GetChild(0);
+                        rect.MouseFilter = MouseFilterEnum.Ignore;
                         GetParent().RemoveChild(this);
                         orphanage.AddChild(this);
                     }
@@ -74,13 +78,6 @@ namespace InventoryTest
                 _item = item;
                 TextureRect rect = (TextureRect)GetNode("TextureRect");
                 SetTooltip(item.TooltipText);
-                GD.Print(item.Name);
-                GD.Print(GetChildCount());
-                if (GetParent() != null)
-                {
-                    GD.Print(GetParent().Name);
-                    GD.Print(GetParent().GetChildCount());
-                }
                 rect.Texture = (Texture)ResourceLoader.Load(item.Texture);
             }
         }

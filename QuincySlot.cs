@@ -22,35 +22,20 @@ namespace InventoryTest
         {
             if (@event is InputEventMouseButton button && button.Pressed && button.ButtonIndex == 1)
             {
-                GD.Print("Clicked!");
                 if (orphanage.GetChildCount() > 0)
                 {
                     QuincyItem item = (QuincyItem)orphanage.GetChild(0);
                     if (ItemTypes.Contains(item.Item.Type))
                     {
-                        item.MouseFilter = MouseFilterEnum.Pass;
                         item.Drag = false;
                         item.RectGlobalPosition = Vector2.Zero;
                         orphanage.RemoveChild(item);
                         AddChild(item);
+                        TextureRect rect = (TextureRect)GetChild(1).GetChild(0);
+                        rect.MouseFilter = MouseFilterEnum.Pass;
                     }
                 }
             }
         }
-
-        public QuincySlot()
-        {
-        }
-
-        //public QuincySlot(QuincyItem item)
-        //{
-        //    Item = item;
-        //}
-
-        //public QuincySlot(QuincyItem item, List<ItemType> types)
-        //{
-        //    Item = item;
-        //    ItemTypes = types;
-        //}
     }
 }
